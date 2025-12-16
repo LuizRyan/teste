@@ -80,11 +80,51 @@ const ESCOLAS_SEOM = [
 
 const $ = (sel) => document.querySelector(sel);
 
+let allregistros = []; 
 let temaAtual = null;
 let editingId = null;
 let registros = [];
 
+function aplicarFiltro() {
+    const filtro = document.getElementById("filtroTema");
+    const temaSelecionado = filtro ? filtro.value : "";
+
+    let listaParaExibir = [];
+
+    if (temaSelecionado === "") {
+        listaParaExibir = allRegistros;
+    } else {
+        listaParaExibir = allRegistros.filter(
+            r => r.tema_key === temaSelecionado || r.tema === temaSelecionado
+        );
+    }
+
+    renderTable(listaParaExibir);
+}
+
+function popularSelectFiltro() {
+    const select = document.getElementById("filtroTema");
+    if (!select) return;
+
+    select.innerHTML = '<option value="">Todos os Temas</option>';
+
+    Object.keys(TEMAS).forEach(key => {
+        const option = document.createElement("option");
+        option.value = key;
+        option.innerText = TEMAS[key];
+        select.appendChild(option);
+    });
+
+    select.addEventListener("change", aplicarFiltro);
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
+    
+    popularSelectFiltro(); 
+    initTemaAtivo();
+    loadAndRender();
+});
 
     const btnIrIndex = document.getElementById("btnIrIndex");
     const btnIrSeape = document.getElementById("btnIrSeape");
@@ -250,7 +290,6 @@ async function onSubmit(ev) {
         data_saida: data.data_saida || null,
     };
 
-    // LICENÇA/CONTAGEM não usa status
     if (temaAtual === "LICENCA_PREMIUM" || temaAtual === "CONTAGEM_TEMPO") {
         payload.status = null;
         payload.protocolo = null;
@@ -282,8 +321,9 @@ async function onSubmit(ev) {
 }
 
 function startEditById(id) {
-    const r = registros.find((x) => x.id === id);
+    const r = allRegistros.find((x) => x.id === id); 
     if (!r) return;
+}
 
     temaAtual = r.tema_key || "VTC";
     document.querySelectorAll(".nav-item").forEach((b) => {
@@ -320,19 +360,26 @@ function updateSubmitText() {
     btn.textContent = editingId ? "Atualizar registro" : "Salvar registro";
 }
 
-function renderTable() {
+function renderTable(lista) {
     const tbody = ensureTbody();
     if (!tbody) return;
 
     tbody.innerHTML = "";
 
-    if (!registros.length) {
+    if (!lista || !lista.length) {
         tbody.innerHTML = `
       <tr>
-        <td colspan="9" class="muted">Nenhum registro salvo ainda.</td>
+        <td colspan="9" class="muted" style="text-align:center; padding:20px;">
+            Nenhum registro encontrado.
+        </td>
       </tr>`;
         return;
     }
+
+    lista.forEach((r) => {
+        
+    });
+}
 
     registros.forEach((r) => {
         const temaKey = (r.tema_key || "").toUpperCase();
@@ -584,3 +631,4 @@ function escapeHtml(str) {
 function escapeAttr(str) {
     return escapeHtml(str).replaceAll('"', "&quot;");
 }
+
