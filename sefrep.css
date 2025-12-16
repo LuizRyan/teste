@@ -447,4 +447,37 @@ textarea:focus {
     .grid {
         grid-template-columns: 1fr;
     }
+
+/* estilo */
+.table-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.filter-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+.input-filter {
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 12px;
+    border-radius: 8px;
+    outline: none;
+    cursor: pointer;
+}
+
+.input-filter:focus {
+    border-color: var(--primary);
+}
+    
 }
