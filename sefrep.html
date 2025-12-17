@@ -1,88 +1,71 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cadastro – SEFREP</title>
-    <link rel="stylesheet" href="sefrep.css?v=4" />
+    <title>Dashboard SEFREP</title>
+    <link rel="stylesheet" href="sefrep.css" />
     <script src="sefrep.js" defer></script>
 </head>
-
 <body>
-    <div class="page">
-        <header class="topbar">
-            <div class="topbar-left">
-                <h1>Cadastro – SEFREP</h1>
-                <p class="subtitle">Registro por tema (VTC, CTC, Licença Premio, Contagem de Tempo).</p>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="brand">
+                <span>⚡</span> SEPES
             </div>
 
-            <div class="topbar-right">
-                <span class="pill" id="pillTema">Tema: <strong>VTC</strong></span>
-
-                <button class="btn ghost" id="btnIrIndex" type="button">Menu</button>
-                <button class="btn ghost" id="btnIrSeape" type="button">SEAPE</button>
+            <div class="nav-section">
+                <div class="nav-label">Módulos</div>
+                <button class="nav-btn active">SEFREP</button>
+                <button class="nav-btn" id="btnIrSeape">SEAPE</button>
             </div>
-        </header>
 
-        <main class="content">
-            <aside class="sidebar">
-                <div class="sidebar-title">Temas</div>
+            <div class="nav-section">
+                <div class="nav-label">Temas de Cadastro</div>
+                <button class="nav-btn active" data-tema="VTC">VTC</button>
+                <button class="nav-btn" data-tema="CTC">CTC</button>
+                <button class="nav-btn" data-tema="LICENCA_PREMIUM">Licença Prêmio</button>
+                <button class="nav-btn" data-tema="CONTAGEM_TEMPO">Contagem de Tempo</button>
+            </div>
+        </aside>
 
-                <button class="nav-item active" data-tema="VTC" type="button">
-                    <span class="dot"></span> VTC
-                </button>
+        <main class="main-content">
+            <header class="header">
+                <div class="page-title">
+                    <h1 id="pageTitle">VTC</h1>
+                    <p>Gerenciamento de registros e processos</p>
+                </div>
+                <div class="user-info">
+                    <button class="btn btn-secondary" id="btnIrIndex">Sair</button>
+                </div>
+            </header>
 
-                <button class="nav-item" data-tema="CTC" type="button">
-                    <span class="dot"></span> CTC
-                </button>
+            <section class="card">
+                <form id="formRegistro">
+                    <div class="form-grid" id="formContainer">
+                        </div>
+                    
+                    <div class="actions">
+                        <button type="submit" class="btn btn-primary">Salvar Registro</button>
+                        <button type="button" class="btn btn-secondary" id="btnCancelar">Limpar</button>
+                    </div>
+                    <div id="msg" style="margin-top: 10px;"></div>
+                </form>
+            </section>
 
-                <button class="nav-item" data-tema="LICENCA_PREMIUM" type="button">
-                    <span class="dot"></span> Licença Premio
-                </button>
-
-                <button class="nav-item" data-tema="CONTAGEM_TEMPO" type="button">
-                    <span class="dot"></span> Contagem de Tempo
-                </button>
-            </aside>
-
-            <section class="panel">
-                <div class="panel-head">
-                    <h2 id="tituloForm">VTC</h2>
-                    <p id="descForm" class="panel-subtitle">Preencha os campos e clique em “Salvar registro”.</p>
+            <section class="card">
+                <div class="table-controls">
+                    <h3>Base de Dados</h3>
+                    <div class="table-filter">
+                        <select id="filtroTema">
+                            <option value="">Todos os Registros</option>
+                        </select>
+                        <button id="btnNovoScroll" class="btn btn-primary" style="margin-left: 10px;">+ Novo</button>
+                    </div>
                 </div>
 
-                <form id="formSefrep" class="form">
-                    <div id="formArea"></div>
-
-                    <div class="form-actions">
-                        <button type="submit" class="btn primary">Salvar registro</button>
-                        <button type="button" class="btn" id="btnCancelar">Cancelar</button>
-                    </div>
-
-                    <div class="msg" id="msg"></div>
-                </form>
-
-                <hr class="divider" />
-
-                <div class="table-head" id="lista">
-    <h3>Registros</h3>
-
-    <div class="table-actions">
-        <div class="filter-wrapper">
-            <select id="filtroTema" class="input-filter">
-                <option value="">todos Temas</option>
-            </select>
-        </div>
-
-        <button id="btnNovoScroll" class="btn small primary" title="Adicionar novo registro">
-            + Novo
-        </button>
-    </div>
-</div>
-
-                <div class="table-wrap">
-                    <table class="table" id="tblRegistros">
+                <div style="overflow-x: auto;">
+                    <table id="tblRegistros">
                         <thead>
                             <tr>
                                 <th>Data</th>
@@ -90,10 +73,10 @@
                                 <th>Nome</th>
                                 <th>Escola</th>
                                 <th>Status</th>
-                                <th>Protocolo/Processo</th>
+                                <th>Protocolo</th>
                                 <th>Entrada</th>
                                 <th>Saída</th>
-                                <th></th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody id="tbodyRegistros"></tbody>
@@ -101,16 +84,7 @@
                 </div>
             </section>
         </main>
-
-        <footer class="footer">
-            <span>SEFREP • Cadastro</span>
-        </footer>
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
-
 </html>
-
-
