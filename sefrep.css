@@ -1,254 +1,90 @@
-/* --- VARIAVEIS GLOBAIS (Design System) --- */
-:root {
-    /* Paleta Slate (Cinza Azulado Profissional) */
-    --bg-body: #0f172a;      /* Fundo da página */
-    --bg-card: #1e293b;      /* Fundo dos cartões/paineis */
-    --bg-input: #334155;     /* Fundo de inputs */
-    
-    /* Bordas e Separadores */
-    --border: #334155;
-    --border-hover: #475569;
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard SEFREP</title>
+    <link rel="stylesheet" href="sefrep.css" />
+    <script src="sefrep.js" defer></script>
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="brand">
+                <span>⚡</span> SEPES
+            </div>
 
-    /* Texto */
-    --text-main: #f8fafc;    /* Branco quase puro */
-    --text-muted: #94a3b8;   /* Cinza claro */
-    
-    /* Ações / Primary Color */
-    --primary: #6366f1;      /* Indigo moderno (menos agressivo que o roxo neon) */
-    --primary-hover: #4f46e5;
-    
-    /* Status Colors */
-    --success: #10b981;
-    --warning: #f59e0b;
-    --danger: #ef4444;
+            <div class="nav-section">
+                <div class="nav-label">Módulos</div>
+                <button class="nav-btn active">SEFREP</button>
+                <button class="nav-btn" id="btnIrSeape">SEAPE</button>
+            </div>
 
-    /* Layout */
-    --radius: 8px;           /* Bordas levemente arredondadas (padrão SaaS) */
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --font: 'Inter', system-ui, -apple-system, sans-serif;
-}
+            <div class="nav-section">
+                <div class="nav-label">Temas de Cadastro</div>
+                <button class="nav-btn active" data-tema="VTC">VTC</button>
+                <button class="nav-btn" data-tema="CTC">CTC</button>
+                <button class="nav-btn" data-tema="LICENCA_PREMIUM">Licença Prêmio</button>
+                <button class="nav-btn" data-tema="CONTAGEM_TEMPO">Contagem de Tempo</button>
+            </div>
+        </aside>
 
-/* --- RESET & BASE --- */
-* { box-sizing: border-box; }
+        <main class="main-content">
+            <header class="header">
+                <div class="page-title">
+                    <h1 id="pageTitle">VTC</h1>
+                    <p>Gerenciamento de registros e processos</p>
+                </div>
+                <div class="user-info">
+                    <button class="btn btn-secondary" id="btnIrIndex">Sair</button>
+                </div>
+            </header>
 
-body {
-    margin: 0;
-    font-family: var(--font);
-    background-color: var(--bg-body);
-    color: var(--text-main);
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased; /* Texto mais nítido */
-}
+            <section class="card">
+                <form id="formRegistro">
+                    <div class="form-grid" id="formContainer">
+                        </div>
+                    
+                    <div class="actions">
+                        <button type="submit" class="btn btn-primary">Salvar Registro</button>
+                        <button type="button" class="btn btn-secondary" id="btnCancelar">Limpar</button>
+                    </div>
+                    <div id="msg" style="margin-top: 10px;"></div>
+                </form>
+            </section>
 
-/* --- LAYOUT PRINCIPAL --- */
-.page {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    max-width: 1400px; /* Limita a largura em telas gigantes */
-    margin: 0 auto;
-    padding: 0 20px;
-}
+            <section class="card">
+                <div class="table-controls">
+                    <h3>Base de Dados</h3>
+                    <div class="table-filter">
+                        <select id="filtroTema">
+                            <option value="">Todos os Registros</option>
+                        </select>
+                        <button id="btnNovoScroll" class="btn btn-primary" style="margin-left: 10px;">+ Novo</button>
+                    </div>
+                </div>
 
-/* --- TOPBAR (Cabeçalho) --- */
-.topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 0;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 30px;
-}
-
-.topbar h1 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin: 0;
-    letter-spacing: -0.025em; /* Típico de designs modernos */
-}
-
-.subtitle {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    margin: 4px 0 0 0;
-}
-
-/* --- GRID DO DASHBOARD --- */
-.content {
-    display: grid;
-    grid-template-columns: 240px 1fr; /* Sidebar fixa + Conteúdo fluido */
-    gap: 40px;
-    align-items: start;
-}
-
-@media (max-width: 900px) {
-    .content { grid-template-columns: 1fr; } /* Mobile vira coluna única */
-}
-
-/* --- SIDEBAR (Menu Lateral) --- */
-.sidebar-title {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-muted);
-    margin-bottom: 15px;
-    font-weight: 600;
-}
-
-.nav-item {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 10px 15px;
-    margin-bottom: 5px;
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: var(--radius);
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: all 0.2s;
-    font-size: 0.95rem;
-    text-align: left;
-}
-
-.nav-item:hover {
-    background: rgba(255,255,255,0.03);
-    color: var(--text-main);
-}
-
-.nav-item.active {
-    background: rgba(99, 102, 241, 0.1); /* Primary com transparência */
-    color: var(--primary);
-    border-color: rgba(99, 102, 241, 0.2);
-    font-weight: 600;
-}
-
-.dot {
-    height: 8px; width: 8px;
-    background: currentColor;
-    border-radius: 50%;
-    margin-right: 12px;
-}
-
-/* --- FORMULÁRIOS & CARDS --- */
-.form-section, .table-wrap {
-    background: var(--bg-card);
-    padding: 30px;
-    border-radius: 12px; /* Card arredondado */
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-    margin-bottom: 40px;
-}
-
-/* Grid dentro do formulário para ficar profissional */
-#formRegistro {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* 2 colunas */
-    gap: 20px;
-}
-
-/* Campo "full" ocupa 2 colunas */
-.field.full { grid-column: span 2; }
-.actions { grid-column: span 2; margin-top: 10px; display: flex; gap: 10px; }
-
-label {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--text-muted);
-    margin-bottom: 6px;
-}
-
-input, select, textarea {
-    width: 100%;
-    background: var(--bg-input);
-    border: 1px solid var(--border);
-    color: var(--text-main);
-    padding: 10px 12px;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    font-family: var(--font);
-    transition: 0.2s border-color;
-}
-
-input:focus, select:focus, textarea:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); /* Anel de foco */
-}
-
-/* --- BOTÕES --- */
-.btn {
-    padding: 10px 20px;
-    border-radius: 6px;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: 0.2s;
-    background: var(--bg-input);
-    color: var(--text-main);
-}
-
-.btn:hover { background: var(--border-hover); }
-
-.btn.primary {
-    background: var(--primary);
-    color: white;
-}
-.btn.primary:hover { background: var(--primary-hover); }
-
-.btn.small { padding: 6px 12px; font-size: 0.8rem; }
-
-/* --- TABELA (Estilo Stripe/SaaS) --- */
-.table-head {
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.9rem;
-}
-
-.table th {
-    text-align: left;
-    padding: 12px 16px;
-    color: var(--text-muted);
-    border-bottom: 1px solid var(--border);
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-}
-
-.table td {
-    padding: 14px 16px;
-    border-bottom: 1px solid var(--border);
-    color: var(--text-main);
-}
-
-.table tr:hover {
-    background: rgba(255,255,255,0.02); /* Hover sutil na linha */
-}
-
-/* Badges de Status Modernos */
-.badge-status {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 99px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.badge-status.concluido { background: rgba(16, 185, 129, 0.15); color: var(--success); }
-.badge-status.andamento { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
-.badge-status.naoconcluido { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
-
-/* --- FILTROS NO CABEÇALHO DA TABELA --- */
-.table-actions { display: flex; gap: 10px; align-items: center; }
-.filter-wrapper { display: flex; align-items: center; }
+                <div style="overflow-x: auto;">
+                    <table id="tblRegistros">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Tema</th>
+                                <th>Nome</th>
+                                <th>Escola</th>
+                                <th>Status</th>
+                                <th>Protocolo</th>
+                                <th>Entrada</th>
+                                <th>Saída</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyRegistros"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</html>
